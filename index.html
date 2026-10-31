@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Thi Java - Trắc Nghiệm & Tự Luận Chuyên Sâu</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #f0fdf4;
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+            --code-bg: #1e293b;
+            --code-text: #f8fafc;
+        }
+
+        .dark {
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #22c55e;
+            --success-bg: #064e3b;
+            --error: #ef4444;
+            --error-bg: #7f1d1d;
+            --code-bg: #0b1120;
+            --code-text: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 60px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Nav Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Filter & Controls */
+        .controls-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .set-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        select, input[type="text"] {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: var(--border);
+        }
+
+        /* Score Tracker */
+        .score-bar {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .score-item .num {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .score-item .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.15s, border-color 0.15s;
+        }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .q-tag {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--border);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .q-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        /* Java Code Block */
+        pre.code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-family: Consolas, Monaco, "Courier New", monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 10px 0 16px 0;
+            line-height: 1.45;
+        }
+
+        /* Options */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .option-item {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-item:hover:not(.locked) {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .option-item .badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--border);
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .option-item.correct {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .option-item.correct .badge {
+            background: var(--success);
+            color: white;
+        }
+
+        .option-item.wrong {
+            background: var(--error-bg) !important;
+            border-color: var(--error) !important;
+            color: var(--error);
+        }
+
+        .option-item.wrong .badge {
+            background: var(--error);
+            color: white;
+        }
+
+        .explanation-box {
+            display: none;
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: var(--bg);
+            border-left: 4px solid var(--primary);
+            font-size: 0.92rem;
+        }
+
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Essay / Written Section */
+        .essay-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .essay-category {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .essay-q {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .essay-ans {
+            font-size: 0.96rem;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .search-bar {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.4rem; }
+            .score-bar { font-size: 0.9rem; }
+            .score-item .num { font-size: 1.2rem; }
+            .controls-card { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 Đổi giao diện</button>
+        <h1>☕ Ôn Thi Môn Java - STU</h1>
+        <p>Hệ thống 100 câu trắc nghiệm & Toàn bộ câu hỏi tự luận - giải chi tiết 100%</p>
+    </header>
+
+    <div class="container">
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('quiz')">🎯 Làm Trắc Nghiệm (90 câu)</button>
+            <button class="tab-btn" onclick="switchTab('essay')">📖 Tự Luận & Code Analysis</button>
+            <button class="tab-btn" onclick="switchTab('vandap')">💼 Vấn Đáp CSDL & Android</button>
+        </div>
+
+        <!-- TAB 1: QUIZ -->
+        <div id="tab-quiz">
+            <div class="controls-card">
+                <div class="set-selector">
+                    <label><strong>Chọn bộ đề:</strong></label>
+                    <select id="setSelect" onchange="changeQuestionSet()">
+                        <option value="all">🌟 Toàn bộ câu hỏi (90 câu)</option>
+                        <option value="oop">🔷 Bộ 1: OOP Google Forms (50 câu)</option>
+                        <option value="basic">⚡ Bộ 2: Trắc nghiệm nền tảng Java (25 câu)</option>
+                        <option value="code">💡 Bộ 3: Code Snippet Hướng đối tượng (15 câu)</option>
+                        <option value="wrong">❌ Các câu bạn làm sai</option>
+                    </select>
+                </div>
+                <div class="action-btns">
+                    <button class="btn btn-outline" onclick="shuffleCurrentQuestions()">🔀 Xáo trộn</button>
+                    <button class="btn btn-outline" onclick="resetQuiz()">🔄 Làm lại từ đầu</button>
+                </div>
+            </div>
+
+            <!-- Score Tracker -->
+            <div class="score-bar">
+                <div class="score-item">
+                    <div class="num" id="stat-total">0</div>
+                    <div class="label">Tổng số câu</div>
+                </div>
+                <div class="score-item">
+                    <div class="num" id="stat-done" style="color: var(--primary);">0</div>
+                    <div class="label">Đã trả lời</div>
+                </div>
+                <div class="score-item">
+                    <div class="num" id="stat-correct" style="color: var(--success);">0</div>
+                    <div class="label">Đúng</div>
+                </div>
+                <div class="score-item">
+                    <div class="num" id="stat-wrong" style="color: var(--error);">0</div>
+                    <div class="label">Sai</div>
+                </div>
+                <div class="score-item">
+                    <div class="num" id="stat-pct">0%</div>
+                    <div class="label">Tỷ lệ đúng</div>
+                </div>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-list"></div>
+        </div>
+
+        <!-- TAB 2: ESSAY -->
+        <div id="tab-essay" style="display: none;">
+            <div class="search-bar">
+                <input type="text" id="essaySearch" placeholder="🔍 Tìm kiếm câu hỏi tự luận theo từ khóa (vd: super, final, equals, string, try-catch, mvc...)" oninput="filterEssay()">
+            </div>
+            <div id="essay-list"></div>
+        </div>
+
+        <!-- TAB 3: VẤN ĐÁP / ANDROID -->
+        <div id="tab-vandap" style="display: none;">
+            <div class="controls-card">
+                <div>
+                    <h3>📌 Trọng tâm ôn thi Vấn đáp & Lập trình ứng dụng Java</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Bao gồm: JVM, Mô hình MVC, JDBC khóa tự tăng, Hibernate NetBeans, Android Dialogs & Menu.</p>
+                </div>
+            </div>
+            <div id="vandap-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data embedded
+        const oopQuestions = [{"id":"oop_1","title":"Câu 1. Cho code:\nclass A { void show() { System.out.print(\"A\"); } }\nclass B extends A { void show() { System.out.print(\"B\"); } }\npublic class Test {\n    public static void main(String[] args) {\n        A a = new B();\n        a.show();\n    }\n}","options":["A","B","AB","Lỗi biên dịch"],"answer":1,"explanation":"Đa hình tại runtime: phương thức show() của đối tượng thực tế B được thực thi."},{"id":"oop_2","title":"Câu 2. Cho code:\nclass A { A() { System.out.print(\"A\"); } }\nclass B extends A { B() { System.out.print(\"B\"); } }\npublic class Test {\n    public static void main(String[] args) { new B(); }\n}","options":["A","B","AB","BA"],"answer":2,"explanation":"Constructor lớp cha A luôn tự động chạy trước constructor lớp con B."},{"id":"oop_3","title":"Câu 3. Cho code:\nclass A { A(int x) { System.out.print(\"A\" + x); } }\nclass B extends A {\n    B() { super(5); System.out.print(\"B\"); }\n}\npublic class Test {\n    public static void main(String[] args) { new B(); }\n}","options":["A5B","B A5","A5","Lỗi biên dịch"],"answer":0,"explanation":"super(5) gọi constructor A(5) in ra A5, sau đó constructor B in B -> A5B."},{"id":"oop_4","title":"Câu 4. Cho code:\nclass A { final void f() {} }\nclass B extends A { void f() {} }","options":["Biên dịch bình thường","Lỗi biên dịch vì không thể override phương thức final","Lỗi runtime","f() bị ẩn"],"answer":1,"explanation":"Phương thức final không thể bị ghi đè (override) ở lớp con."},{"id":"oop_5","title":"Câu 5. Cho code:\nclass A {\n    private void f() { System.out.print(\"A\"); }\n    public void g() { f(); }\n}\nclass B extends A {\n    void f() { System.out.print(\"B\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new B().g();\n    }\n}","options":["A","B","AB","Lỗi biên dịch"],"answer":0,"explanation":"private void f() trong A không bị override. g() thuộc A nên gọi f() của A."},{"id":"oop_6","title":"Câu 6. Cho code:\nclass A { static void f() { System.out.print(\"A\"); } }\nclass B extends A { static void f() { System.out.print(\"B\"); } }\npublic class Test {\n    public static void main(String[] args) {\n        A a = new B();\n        a.f();\n    }\n}","options":["A","B","AB","Lỗi biên dịch"],"answer":0,"explanation":"Phương thức static được liên kết tĩnh (static binding) theo kiểu khai báo A."},{"id":"oop_7","title":"Câu 7. Cho code:\nclass A { int x = 10; }\nclass B extends A { int x = 20; }\npublic class Test {\n    public static void main(String[] args) {\n        A a = new B();\n        System.out.println(a.x);\n    }\n}","options":["10","20","0","Lỗi biên dịch"],"answer":0,"explanation":"Biến/thuộc tính không có tính đa hình, được truy xuất theo kiểu khai báo của biến tham chiếu (A.x = 10)."},{"id":"oop_8","title":"Câu 8. Cho code:\nclass A {}\nclass B extends A {}\npublic class Test {\n    public static void main(String[] args) {\n        A a = new B();\n        B b = (B) a;\n        System.out.println(\"OK\");\n    }\n}","options":["OK","Lỗi biên dịch","ClassCastException","Lỗi vì không thể ép kiểu"],"answer":0,"explanation":"a thực sự trỏ tới đối tượng B nên ép kiểu downcast (B) a hoàn toàn hợp lệ."},{"id":"oop_9","title":"Câu 9. Cho code:\nclass A {}\nclass B extends A {}\npublic class Test {\n    public static void main(String[] args) {\n        Object o = new B();\n        System.out.println(o instanceof A);\n    }\n}","options":["true","false","Lỗi biên dịch","ClassCastException"],"answer":0,"explanation":"B kế thừa A nên một đối tượng B cũng là một thể hiện của A -> true."},{"id":"oop_10","title":"Câu 10. Cho code:\nabstract class A {}\npublic class Test {\n    public static void main(String[] args) {\n        A a = new A();\n    }\n}","options":["Chạy bình thường","Lỗi biên dịch vì không thể khởi tạo abstract class","Lỗi runtime","In ra null"],"answer":1,"explanation":"Lớp trừu tượng (abstract class) không thể khởi tạo trực tiếp bằng toán tử new."},{"id":"oop_11","title":"Câu 11. Cho code:\nclass A {\n    abstract void f();\n}","options":["Biên dịch bình thường","Lỗi biên dịch vì A không phải abstract","Lỗi runtime","f() tự động trở thành public"],"answer":1,"explanation":"Lớp chứa phương thức abstract bắt buộc phải được khai báo là abstract class."},{"id":"oop_12","title":"Câu 12. Cho code:\nabstract class A {\n    A() { System.out.print(\"A\"); }\n}\nclass B extends A {\n    B() { System.out.print(\"B\"); }\n}\npublic class Test {\n    public static void main(String[] args) { new B(); }\n}","options":["A","B","AB","Lỗi biên dịch"],"answer":2,"explanation":"Abstract class vẫn có constructor và chạy trước constructor lớp con."},{"id":"oop_13","title":"Câu 13. Cho code:\nabstract class A { abstract void f(); }\nclass B extends A { void f() { System.out.print(\"B\"); } }\npublic class Test {\n    public static void main(String[] args) {\n        new B().f();\n    }\n}","options":["A","B","AB","Lỗi biên dịch"],"answer":1,"explanation":"B đã cài đặt phương thức f() của abstract class A -> in B."},{"id":"oop_14","title":"Câu 14. Khẳng định nào đúng về abstract class?","options":["Chỉ có phương thức abstract","Có thể có phương thức thường","Không thể có constructor","Không thể có field"],"answer":1,"explanation":"Abstract class hoàn toàn có thể có các phương thức thông thường có thân hàm."},{"id":"oop_15","title":"Câu 15. Cho code:\nabstract final class A {}","options":["Biên dịch bình thường","Lỗi biên dịch vì abstract và final xung đột","Lỗi runtime","Chỉ cảnh báo"],"answer":1,"explanation":"abstract và final có ý nghĩa đối nghịch (abstract đòi hỏi kế thừa, final cấm kế thừa) nên không thể kết hợp."},{"id":"oop_16","title":"Câu 16. Cho code:\nabstract class A {\n    abstract void f();\n    void g() { System.out.print(\"g\"); }\n}\nclass B extends A {\n    void f() { System.out.print(\"f\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new B().g();\n    }\n}","options":["f","g","fg","Lỗi biên dịch"],"answer":1,"explanation":"new B().g() gọi phương thức g() kế thừa từ abstract class A."},{"id":"oop_17","title":"Câu 17. Cho code:\nabstract class A {\n    static void f() { System.out.print(\"A\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        A.f();\n    }\n}","options":["A","Lỗi biên dịch","Lỗi runtime","Không in gì"],"answer":0,"explanation":"Phương thức static trong abstract class có thể gọi trực tiếp qua tên lớp A.f()."},{"id":"oop_18","title":"Câu 18. Cho code:\nabstract class A {\n    final void f() { System.out.print(\"A\"); }\n}\nclass B extends A {}\npublic class Test {\n    public static void main(String[] args) {\n        new B().f();\n    }\n}","options":["A","Lỗi biên dịch","Lỗi runtime","Không in gì"],"answer":0,"explanation":"Abstract class có thể chứa phương thức final và lớp con thừa kế bình thường."},{"id":"oop_19","title":"Câu 19. Cho code:\nabstract class A {\n    abstract void f();\n}\nabstract class B extends A {\n    abstract void g();\n}","options":["Lỗi vì B không implement f()","Biên dịch bình thường vì B cũng abstract","Lỗi vì không thể extends abstract class","Lỗi runtime"],"answer":1,"explanation":"Lớp con B cũng là abstract nên không bắt buộc phải cài đặt phương thức abstract f() của cha."},{"id":"oop_20","title":"Câu 20. Cho code:\nabstract class A {\n    A(int x) { System.out.print(x); }\n}\nclass B extends A {\n    B() { super(10); }\n}\npublic class Test {\n    public static void main(String[] args) { new B(); }\n}","options":["10","0","Lỗi biên dịch","Không in gì"],"answer":0,"explanation":"B() gọi super(10) truyền vào constructor A(int x) in ra 10."},{"id":"oop_21","title":"Câu 21. Cho code:\nabstract class A {\n    private abstract void f();\n}","options":["Biên dịch bình thường","Lỗi biên dịch vì abstract method không thể private","Lỗi runtime","f() tự động thành public"],"answer":1,"explanation":"Phương thức abstract bắt buộc phải được override ở lớp con nên không thể private."},{"id":"oop_22","title":"Câu 22. Cho code:\nabstract class A {\n    abstract int f();\n}\nclass B extends A {\n    int f() { return 10; }\n}\npublic class Test {\n    public static void main(String[] args) {\n        System.out.println(new B().f());\n    }\n}","options":["0","10","Lỗi biên dịch","Lỗi runtime"],"answer":1,"explanation":"new B().f() trả về 10 và in ra màn hình."},{"id":"oop_23","title":"Câu 23. Cho code:\nabstract class A {\n    abstract void f();\n}\nclass B extends A {\n    void f() {}\n}\nclass C extends B {}\npublic class Test {\n    public static void main(String[] args) {\n        new C().f();\n    }\n}","options":["Lỗi biên dịch","Chạy bình thường","Lỗi runtime","Không in gì"],"answer":1,"explanation":"B đã implement f(), C kế thừa B nên không bị lỗi biên dịch."},{"id":"oop_24","title":"Câu 24. Abstract class có thể có:","options":["Constructor","Phương thức static","Field","Cả A, B, C"],"answer":3,"explanation":"Abstract class có thể có đầy đủ Constructor, Static method và Field."},{"id":"oop_25","title":"Câu 25. Cho code:\nabstract class A {\n    abstract void f();\n    void g() { f(); }\n}\nclass B extends A {\n    void f() { System.out.print(\"B\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new B().g();\n    }\n}","options":["A","B","AB","Lỗi biên dịch"],"answer":1,"explanation":"new B().g() gọi g() trong A, g() gọi f() và theo đa hình runtime sẽ gọi f() của B."},{"id":"oop_26","title":"Câu 26. Cho code:\ninterface I {\n    void f();\n}\nclass C implements I {\n    void f() {}\n}","options":["Biên dịch bình thường","Lỗi vì f() phải là public","Lỗi vì interface không có phương thức abstract","Lỗi runtime"],"answer":1,"explanation":"Phương thức trong interface mặc định là public, khi implement không được thu hẹp phạm vi truy cập."},{"id":"oop_27","title":"Câu 27. Cho code:\ninterface I {\n    default void f() { System.out.print(\"I\"); }\n}\nclass C implements I {}\npublic class Test {\n    public static void main(String[] args) {\n        new C().f();\n    }\n}","options":["I","Lỗi biên dịch","Lỗi runtime","Không in gì"],"answer":0,"explanation":"Lớp C kế thừa phương thức default của interface I -> in I."},{"id":"oop_28","title":"Câu 28. Cho code:\ninterface I {\n    static void f() { System.out.print(\"I\"); }\n}\nclass C implements I {}\npublic class Test {\n    public static void main(String[] args) {\n        C.f();\n    }\n}","options":["I","Lỗi biên dịch vì static method trong interface không được kế thừa","Lỗi runtime","Không in gì"],"answer":1,"explanation":"Phương thức static trong interface không được kế thừa, bắt buộc phải gọi qua tên interface I.f()."},{"id":"oop_29","title":"Câu 29. Cho code:\ninterface I1 { default void f() { System.out.print(\"I1\"); } }\ninterface I2 { default void f() { System.out.print(\"I2\"); } }\nclass C implements I1, I2 {}","options":["Biên dịch bình thường","Lỗi biên dịch vì xung đột default method","Chạy và in I1","Chạy và in I2"],"answer":1,"explanation":"C implements 2 interface có cùng default method gây lỗi xung đột (diamond problem)."},{"id":"oop_30","title":"Câu 30. Cho code:\ninterface I1 { default void f() { System.out.print(\"I1\"); } }\ninterface I2 { default void f() { System.out.print(\"I2\"); } }\nclass C implements I1, I2 {\n    public void f() { I1.super.f(); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new C().f();\n    }\n}","options":["I1","I2","Lỗi biên dịch","Lỗi runtime"],"answer":0,"explanation":"C giải quyết xung đột bằng cách chỉ định rõ I1.super.f() -> in I1."},{"id":"oop_31","title":"Câu 31. Cho code:\ninterface I {\n    int X = 10;\n}\nclass C implements I {\n    void f() { X = 20; }\n}","options":["Biên dịch bình thường","Lỗi vì X là final","Lỗi runtime","X trở thành 20"],"answer":1,"explanation":"Thuộc tính trong interface ngầm định là public static final, không thể gán lại giá trị."},{"id":"oop_32","title":"Câu 32. Cho code:\ninterface I1 { void a(); }\ninterface I2 { void b(); }\ninterface I3 extends I1, I2 {}\nclass C implements I3 {\n    public void a() {}\n    public void b() {}\n}","options":["Lỗi vì interface không thể extends nhiều interface","Biên dịch bình thường","Lỗi vì C không implement hết","Lỗi runtime"],"answer":1,"explanation":"Interface cho phép đa kế thừa nhiều interface khác (interface I3 extends I1, I2)."},{"id":"oop_33","title":"Câu 33. Cho code:\ninterface I { void f(); }\nabstract class A implements I {}","options":["Lỗi vì A không implement f()","Biên dịch bình thường vì A là abstract","Lỗi vì abstract class không được implements interface","Lỗi runtime"],"answer":1,"explanation":"Lớp trừu tượng không bắt buộc phải implement phương thức của interface."},{"id":"oop_34","title":"Câu 34. Cho code:\ninterface I {\n    private void p() { System.out.print(\"p\"); }\n    default void f() { p(); }\n}\nclass C implements I {}\npublic class Test {\n    public static void main(String[] args) {\n        new C().f();\n    }\n}","options":["p","Lỗi biên dịch nếu dùng Java 8","Lỗi runtime","Không in gì"],"answer":0,"explanation":"Từ Java 9, interface hỗ trợ private method; default method f() gọi p() in ra 'p'."},{"id":"oop_35","title":"Câu 35. Cho code:\ninterface I {\n    static void f() { System.out.print(\"I\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        I.f();\n    }\n}","options":["I","Lỗi biên dịch","Lỗi runtime","Không in gì"],"answer":0,"explanation":"Phương thức static trong interface được gọi trực tiếp qua tên interface I.f()."},{"id":"oop_36","title":"Câu 36. Cho code:\ninterface I {\n    default void f() { System.out.print(\"I\"); }\n}\nclass C implements I {\n    public void f() { System.out.print(\"C\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new C().f();\n    }\n}","options":["I","C","IC","Lỗi biên dịch"],"answer":1,"explanation":"Lớp C đã override lại phương thức default của interface I -> in C."},{"id":"oop_37","title":"Câu 37. Cho code:\ninterface I1 { void f(); }\ninterface I2 { void f(); }\nclass C implements I1, I2 {\n    public void f() { System.out.print(\"C\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new C().f();\n    }\n}","options":["C","Lỗi vì xung đột phương thức","Lỗi runtime","Không in gì"],"answer":0,"explanation":"Hai interface có cùng abstract method thì một phương thức override duy nhất thỏa mãn cả hai."},{"id":"oop_38","title":"Câu 38. Cho code:\ninterface A { default void f() { System.out.print(\"A\"); } }\ninterface B extends A {}\ninterface C extends A {}\nclass D implements B, C {}\npublic class Test {\n    public static void main(String[] args) {\n        new D().f();\n    }\n}","options":["A","Lỗi vì xung đột default","Lỗi runtime","Không in gì"],"answer":0,"explanation":"B và C cùng kế thừa default method từ A nên lớp D không bị xung đột (cùng chung 1 nguồn)."},{"id":"oop_39","title":"Câu 39. Trong interface, field mặc định là:","options":["public static final","private final","protected static","public non-static"],"answer":0,"explanation":"Field trong interface luôn luôn là public static final."},{"id":"oop_40","title":"Câu 40. Cho code:\ninterface I {}\npublic class Test {\n    public static void main(String[] args) {\n        I i = new I();\n    }\n}","options":["Biên dịch bình thường","Lỗi biên dịch vì không thể khởi tạo interface","Lỗi runtime","In ra null"],"answer":1,"explanation":"Interface không thể khởi tạo trực tiếp bằng toán tử new."},{"id":"oop_41","title":"Câu 41. Cho code:\nclass A { void f() { System.out.print(\"A\"); } }\nclass B extends A { void f() { System.out.print(\"B\"); } }\npublic class Test {\n    public static void main(String[] args) {\n        A[] arr = { new A(), new B() };\n        for (A x : arr) x.f();\n    }\n}","options":["AA","BB","AB","Lỗi biên dịch"],"answer":2,"explanation":"Vòng lặp duyệt mảng: arr[0] là A in 'A', arr[1] là B in 'B' -> AB."},{"id":"oop_42","title":"Câu 42. Cho code:\nclass A { void f() { System.out.print(\"A\"); } }\nclass B extends A { void g() { System.out.print(\"B\"); } }\npublic class Test {\n    public static void main(String[] args) {\n        A a = new B();\n        a.g();\n    }\n}","options":["B","A","Lỗi biên dịch vì A không có g()","Lỗi runtime"],"answer":2,"explanation":"Trình biên dịch kiểm tra theo kiểu khai báo A, mà A không có phương thức g() nên lỗi biên dịch."},{"id":"oop_43","title":"Câu 43. Cho code:\nclass A { void f() { System.out.print(\"A\"); } }\nclass B extends A { void g() { System.out.print(\"B\"); } }\npublic class Test {\n    public static void main(String[] args) {\n        A a = new B();\n        ((B)a).g();\n    }\n}","options":["B","A","Lỗi biên dịch","ClassCastException"],"answer":0,"explanation":"Đã ép kiểu downcast ((B)a) hợp lệ trước khi gọi g() -> in B."},{"id":"oop_44","title":"Câu 44. Cho code:\nclass A {}\nclass B extends A {}\npublic class Test {\n    public static void main(String[] args) {\n        A a = new A();\n        B b = (B)a;\n    }\n}","options":["Biên dịch bình thường","Lỗi biên dịch","ClassCastException khi chạy","In ra null"],"answer":2,"explanation":"a thực sự là đối tượng A, ép kiểu sang lớp con B sẽ ném ClassCastException lúc runtime."},{"id":"oop_45","title":"Câu 45. Cho code:\nclass A {\n    void f(Object o) { System.out.print(\"Object\"); }\n    void f(String s) { System.out.print(\"String\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new A().f(null);\n    }\n}","options":["Object","String","Lỗi biên dịch vì null mơ hồ","Lỗi runtime"],"answer":1,"explanation":"Overloading chọn phương thức có kiểu tham số cụ thể nhất (String kế thừa từ Object nên cụ thể hơn)."},{"id":"oop_46","title":"Câu 46. Cho code:\nclass A { A f() { return this; } }\nclass B extends A { B f() { return this; } }","options":["Lỗi biên dịch","Biên dịch bình thường vì covariant return","Lỗi runtime","Chỉ cảnh báo"],"answer":1,"explanation":"Covariant return type cho phép phương thức override ở lớp con trả về kiểu con của kiểu ở lớp cha."},{"id":"oop_47","title":"Câu 47. Cho code:\nclass A { A f() { return this; } }\nclass B extends A { String f() { return \"B\"; } }","options":["Biên dịch bình thường","Lỗi biên dịch vì kiểu trả về không tương thích","Lỗi runtime","Chỉ cảnh báo"],"answer":1,"explanation":"Kiểu trả về String không tương thích với kiểu A ở lớp cha."},{"id":"oop_48","title":"Câu 48. Cho code:\nclass A { protected void f() {} }\nclass B extends A { void f() {} }","options":["Biên dịch bình thường","Lỗi vì B thu hẹp quyền truy cập của f()","Lỗi runtime","Chỉ cảnh báo"],"answer":1,"explanation":"Không được thu hẹp quyền truy cập khi ghi đè (protected -> default/package-private là lỗi)."},{"id":"oop_49","title":"Câu 49. Cho code:\nclass A { void f() { System.out.print(\"A\"); } }\nclass B extends A {\n    void f() { super.f(); System.out.print(\"B\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new B().f();\n    }\n}","options":["A","B","AB","BA"],"answer":2,"explanation":"new B().f() gọi super.f() in 'A', sau đó in 'B' -> AB."},{"id":"oop_50","title":"Câu 50. Cho code:\nclass A {\n    A() { f(); }\n    void f() { System.out.print(\"A\"); }\n}\nclass B extends A {\n    int x = 10;\n    void f() { System.out.print(\"B\" + x); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new B();\n    }\n}","options":["B10","B0","A","Lỗi biên dịch"],"answer":1,"explanation":"Khi constructor A chạy gọi f(), f() của B được gọi nhưng biến x của B chưa được khởi tạo (mang giá trị mặc định 0) -> in B0."}];
+        const basicQuestions = [{"id":"basic_1","title":"Đâu là câu SAI về ngôn ngữ Java?","options":["Ngôn ngữ Java có phân biệt chữ hoa – chữ thường","Java là ngôn ngữ lập trình hướng đối tượng","Dấu chấm phẩy được sử dụng để kết thúc lệnh trong java","Chương trình viết bằng Java chỉ có thể chạy trên hệ điều hành Windows"],"answer":3,"explanation":"Java là ngôn ngữ độc lập nền tảng với triết lý 'Write Once, Run Anywhere'. Chương trình Java chạy trên máy ảo JVM nên chạy được trên Windows, Linux, macOS, Android..."},{"id":"basic_2","title":"Đâu không phải là một kiểu dữ liệu nguyên thủy trong Java?","options":["double","int","long","long float"],"answer":3,"explanation":"Java có 8 kiểu nguyên thủy: byte, short, int, long, float, double, char, boolean. Không tồn tại kiểu 'long float'."},{"id":"basic_3","title":"Trong câu lệnh sau: public static void main(String[] args) thì phần tử args[0] chứa giá trị gì?","options":["Tên của chương trình","Số lượng tham số","Tham số đầu tiên của danh sách tham số dòng lệnh","Không câu nào đúng"],"answer":2,"explanation":"args là mảng chứa các đối số dòng lệnh (command line arguments), args[0] là tham số đầu tiên được truyền vào khi chạy chương trình."},{"id":"basic_4","title":"Phương thức next() của lớp Scanner dùng để làm gì?","options":["Nhập một số nguyên","Nhập một ký tự","Nhập một từ/chuỗi (dừng lại khi gặp khoảng trắng)","Không có phương thức này"],"answer":2,"explanation":"next() đọc một từ (token) tiếp theo kết thúc bởi khoảng trắng hoặc xuống dòng. Đọc cả dòng là nextLine()."},{"id":"basic_5","title":"Muốn chạy được chương trình Java, chỉ cần cài phần mềm nào sau đây (chọn đáp án đúng nhất)?","options":["Netbeans","Eclipse","JDK","JRE"],"answer":3,"explanation":"Để chạy (run) chương trình Java đã biên dịch, người dùng chỉ cần JRE (Java Runtime Environment). JDK chỉ cần thiết cho lập trình viên để biên dịch (javac)."},{"id":"basic_6","title":"Gói nào trong Java chứa lớp Scanner dùng để nhập dữ liệu từ bàn phím?","options":["java.net","java.io","java.util","java.awt"],"answer":2,"explanation":"Lớp Scanner nằm trong gói tiện ích java.util (cần import java.util.Scanner;)."},{"id":"basic_7","title":"Cho 1 lớp 'XX' với phương thức thông thường là 'display'. Đối tượng 'objX' là 1 đối tượng thuộc lớp 'XX'. Để gọi phương thức 'display' ta sử dụng cú pháp nào?","options":["XX.display;","XX.display();","objX.display();","display();"],"answer":2,"explanation":"display là phương thức instance thông thường, nên bắt buộc gọi thông qua biến đối tượng: objX.display();"},{"id":"basic_8","title":"Đối tượng (Object) trong lập trình hướng đối tượng là gì?","options":["Các lớp được tạo thể hiện từ đó","Một thể hiện cụ thể của một lớp (Instance of a class)","Một tham chiếu đến một thuộc tính","Một biến nguyên thủy"],"answer":1,"explanation":"Lớp (Class) là khuôn mẫu thiết kế, còn Đối tượng (Object) là một thể hiện cụ thể (instance) được sinh ra từ lớp đó."},{"id":"basic_9","title":"Đâu là khai báo định danh biến hợp lệ trong Java?","options":["Object theOne","int the One","long 1the_One","double $the One"],"answer":0,"explanation":"Tên biến không được chứa dấu cách, không được bắt đầu bằng chữ số. 'Object theOne' là khai báo hoàn toàn hợp lệ."},{"id":"basic_10","title":"Cho x = true thuộc kiểu boolean. Biểu thức nào có giá trị khác các biểu thức còn lại?","options":["true","x==true;","1==1","!x"],"answer":3,"explanation":"true, (x==true), (1==1) đều có giá trị là true. Biểu thức !x = !true = false."},{"id":"basic_11","title":"Đâu là khai báo định nghĩa lớp Cat đúng cú pháp?","options":["Class Cat{}","class public Cat(){}","class Cat{}","public Cat class{}"],"answer":2,"explanation":"Từ khóa 'class' viết thường, tên lớp viết hoa chữ cái đầu: 'class Cat{}'."},{"id":"basic_12","title":"Nếu phương thức của bạn ghi đè một phương thức của lớp cha, bạn có thể gọi phương thức bị ghi đè thông qua từ khóa nào?","options":["parent","super","this","static"],"answer":1,"explanation":"Từ khóa 'super.methodName()' được dùng để gọi phương thức của lớp cha."},{"id":"basic_13","title":"Chọn component có phát sinh ActionEvent trong AWT/Swing khi người dùng tương tác?","options":["Button (hoặc JButton)","Label","Checkbox","Windows"],"answer":0,"explanation":"Button/JButton phát sinh ActionEvent khi được click."},{"id":"basic_14","title":"Chọn phát biểu đúng về sự kiện ActionEvent:","options":["Đối tượng TextField có thể phát sinh ActionEvent","Đối tượng TextArea có thể phát sinh ActionEvent","Đối tượng Button có thể phát sinh ActionEvent","Câu a) và c) đúng"],"answer":3,"explanation":"Cả Button (khi click) và TextField (khi nhấn Enter trong ô nhập) đều phát sinh ActionEvent."},{"id":"basic_15","title":"Phương thức nào dùng để hiển thị Frame/JFrame lên màn hình?","options":["setVisible(true)","display()","displayFrame()","showFrame()"],"answer":0,"explanation":"Phương thức setVisible(true) được kế thừa từ Component/Window để hiển thị cửa sổ."},{"id":"basic_16","title":"Chọn phát biểu đúng về lớp Object trong Java:","options":["Lớp Class là lớp cha của lớp Object","Lớp Object là một lớp final","Mọi lớp trong Java đều kế thừa trực tiếp hoặc gián tiếp từ lớp Object","Tất cả các câu trên đều sai"],"answer":2,"explanation":"Lớp java.lang.Object là lớp gốc (root class) của toàn bộ cây phả hệ phân cấp lớp trong Java."},{"id":"basic_17","title":"Lớp nào sau đây KHÔNG phải là lớp bao (Wrapper class)?","options":["String","Integer","Boolean","Character"],"answer":0,"explanation":"String là lớp biểu diễn chuỗi ký tự, không phải là wrapper class cho kiểu nguyên thủy nào cả."},{"id":"basic_18","title":"Đặc điểm nào sau đây là ĐÚNG về tính bất biến (Immutability) của String?","options":["Phương thức concat() làm biến đổi chuỗi gốc","Phương thức toUpperCase() làm biến đổi chuỗi gốc","Phương thức replace() làm biến đổi chuỗi gốc","Không phương thức nào có thể thay đổi chuỗi String ban đầu, tất cả đều trả về chuỗi mới"],"answer":3,"explanation":"Các đối tượng String là Immutable. Mọi thao tác biến đổi chuỗi đều tạo ra đối tượng String mới trên Heap."},{"id":"basic_19","title":"Chọn khai báo đúng chuẩn cho phương thức main khởi đầu chương trình Java:","options":["public static void main()","public void main(String[] arg)","public static void main(String[] args)","public static int main(String[] arg)"],"answer":2,"explanation":"JVM tìm kiếm signature chính xác: public static void main(String[] args)."},{"id":"basic_20","title":"Chọn thứ tự đúng của các thành phần trong một tập tin mã nguồn .java:","options":["Câu lệnh import, khai báo package, khai báo lớp","Khai báo package đầu tiên; thứ tự của import và khai báo lớp là tùy ý","Khai báo package, tiếp theo là các câu lệnh import, sau cùng là khai báo lớp","Câu lệnh import trước tiên; thứ tự của package và lớp là tùy ý"],"answer":2,"explanation":"Thứ tự bắt buộc trong file .java: 1. package; 2. import; 3. class / interface."},{"id":"basic_21","title":"Chọn kết quả đúng sau khi thi hành câu lệnh sau: int[] x = new int[25];","options":["x[24] chưa được định nghĩa","x[25] có giá trị 0","x[0] có giá trị null","x.length có giá trị là 25"],"answer":3,"explanation":"Mảng có 25 phần tử từ chỉ số 0 đến 24. x.length = 25. x[25] sẽ văng lỗi ArrayIndexOutOfBoundsException."},{"id":"basic_22","title":"Chọn câu phát biểu đúng về tính kế thừa:","options":["Một lớp trừu tượng không thể chứa phương thức final","Một lớp final không thể chứa các phương thức trừu tượng","Cả a) và b) đều đúng","Cả a) và b) đều sai"],"answer":1,"explanation":"Lớp final cấm kế thừa nên không thể chứa phương thức trừu tượng (vốn đòi hỏi lớp con kế thừa để cài đặt)."},{"id":"basic_23","title":"File chứa mã nguồn Java sau khi được biên dịch (javac) có phần mở rộng là gì?","options":[".java",".class",".jav",".exe"],"answer":1,"explanation":"File mã nguồn .java được javac biên dịch thành tập tin Bytecode có đuôi .class."},{"id":"basic_24","title":"Khai báo lớp nào dưới đây là đúng cú pháp Java?","options":["public class default {}","protected inner class engine {}","final class outer {}","Tất cả đều sai"],"answer":2,"explanation":"'default' là từ khóa, 'inner' không phải modifier. 'final class outer {}' là khai báo hợp lệ."},{"id":"basic_25","title":"Để khai báo lớp Xedap1 kế thừa lớp Xedap phải sử dụng từ khóa nào?","options":["class Xedap1 extend Xedap {}","public classs Xedap1 extend Xedap {}","class Xedap1 extends Xedap {}","Tất cả đều sai"],"answer":2,"explanation":"Từ khóa kế thừa lớp trong Java là 'extends' (có chữ s)."}];
+        const codeQuestions = [{"id":"code_1","title":"Cho đoạn mã nguồn sau:\nclass Student {\n    String name;\n}\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        System.out.println(s.name.length());\n    }\n}\nKết quả khi chạy chương trình là gì?","options":["0","null","Ném ra ngoại lệ NullPointerException","Lỗi biên dịch"],"answer":2,"explanation":"Thuộc tính name là đối tượng String, mặc định có giá trị null. Khi gọi s.name.length() sẽ ném NullPointerException."},{"id":"code_2","title":"Cho đoạn mã nguồn sau:\nclass A {\n    int x;\n}\npublic class Main {\n    public static void main(String[] args) {\n        A a1 = new A();\n        A a2 = a1;\n        a2.x = 10;\n        System.out.println(a1.x);\n    }\n}\nKết quả in ra màn hình là gì?","options":["0","10","null","Lỗi biên dịch"],"answer":1,"explanation":"a1 và a2 là hai biến tham chiếu cùng trỏ tới 1 ô nhớ đối tượng trên Heap. Thay đổi a2.x làm thay đổi a1.x."},{"id":"code_3","title":"Cho lớp sau:\nclass A {\n    int x = 1;\n}\nNếu tạo 3 đối tượng bằng lệnh: new A(); new A(); new A();\nHỏi có bao nhiêu bản sao của biến x được tạo ra trong bộ nhớ?","options":["1","2","3","4"],"answer":2,"explanation":"x là biến instance (thuộc tính của thể hiện). Mỗi đối tượng mới tạo ra sẽ cấp phát một vùng nhớ riêng cho thuộc tính của nó."},{"id":"code_4","title":"Cho đoạn mã nguồn sau:\nclass Test {\n    int x = 10;\n    void show() {\n        System.out.print(x);\n    }\n}\nKết quả khi thực thi: new Test().show(); là gì?","options":["0","10","null","Lỗi biên dịch"],"answer":1,"explanation":"new Test() tạo đối tượng có thuộc tính x = 10, gọi show() in ra 10."},{"id":"code_5","title":"Cho đoạn mã nguồn sau:\nclass Test {\n    int x;\n    Test() {\n        x++;\n    }\n}\nGiá trị của biến x của mỗi đối tượng ngay sau khi vừa tạo xong (new Test()) là bao nhiêu?","options":["0","1","2","Lỗi biên dịch"],"answer":1,"explanation":"Biến int x mặc định là 0. Constructor Test() thực hiện x++ tăng lên 1."},{"id":"code_6","title":"Cho đoạn mã nguồn sau:\nclass Counter {\n    int value;\n}\npublic class Main {\n    public static void main(String[] args) {\n        Counter c1 = new Counter();\n        Counter c2 = c1;\n        c1.value = 5;\n        c2.value = 10;\n        System.out.println(c1.value);\n    }\n}\nKết quả in ra là gì?","options":["5","10","15","0"],"answer":1,"explanation":"c1 và c2 tham chiếu cùng 1 đối tượng Counter. Lệnh c2.value = 10 ghi đè giá trị của đối tượng đó."},{"id":"code_7","title":"Cho đoạn mã nguồn sau:\nclass NumberBox {\n    int number;\n}\npublic class Main {\n    public static void main(String[] args) {\n        NumberBox a = new NumberBox();\n        a.number = 5;\n        NumberBox b = a;\n        b.number = 20;\n        System.out.println(a.number);\n    }\n}\nKết quả in ra là gì?","options":["5","20","25","0"],"answer":1,"explanation":"a và b cùng tham chiếu một đối tượng duy nhất nên a.number nhận giá trị mới là 20."},{"id":"code_8","title":"Cho đoạn code sau:\npublic class Test {\n    public static void main(String[] args) {\n        String s1 = \"Hello\";\n        String s2 = new String(\"Hello\");\n        System.out.println((s1 == s2) + \" \" + s1.equals(s2));\n    }\n}\nKết quả in ra là:","options":["true true","false true","true false","false false"],"answer":1,"explanation":"== so sánh tham chiếu (khác nhau vì s2 tạo mới trên heap), equals() so sánh nội dung (giống nhau)."},{"id":"code_9","title":"Cho đoạn code sau:\npublic class Test {\n    public static void main(String[] args) {\n        int x = 5;\n        System.out.println(x++ + ++x);\n    }\n}\nKết quả in ra là:","options":["10","11","12","13"],"answer":2,"explanation":"x++ lấy 5 (x tăng lên 6); ++x tăng x lên 7 và lấy 7. Biểu thức: 5 + 7 = 12."},{"id":"code_10","title":"Cho đoạn code sau:\npublic class Test {\n    public static void main(String[] args) {\n        String s = \"Java\";\n        s.concat(\" Programming\");\n        System.out.println(s);\n    }\n}\nKết quả in ra là:","options":["Java","Java Programming","Programming","Lỗi runtime"],"answer":0,"explanation":"String là bất biến (immutable), s.concat() trả về chuỗi mới nhưng không gán lại cho s nên s vẫn là 'Java'."},{"id":"code_11","title":"Cho đoạn code sau:\npublic class Test {\n    public static void main(String[] args) {\n        System.out.println(\"5\" + 2 + 3);\n    }\n}\nKết quả in ra là:","options":["10","55","523","Lỗi biên dịch"],"answer":2,"explanation":"Phép cộng thực hiện từ trái sang phải: '5' + 2 = '52', tiếp tục '52' + 3 = '523'."},{"id":"code_12","title":"Cho đoạn code sau:\npublic class Test {\n    public static void main(String[] args) {\n        String s = \"Hello\";\n        System.out.println(s.substring(1, 3));\n    }\n}\nKết quả in ra là:","options":["Hel","el","ell","He"],"answer":1,"explanation":"substring(beginIndex, endIndex) lấy từ beginIndex đến endIndex - 1. Chỉ số 1 ('e') và 2 ('l') -> 'el'."},{"id":"code_13","title":"Cho đoạn code sau:\npublic class Test {\n    public static void main(String[] args) {\n        int i = 1;\n        switch (i) {\n            case 1: System.out.print(\"1\");\n            case 2: System.out.print(\"2\");\n            default: System.out.print(\"d\");\n        }\n    }\n}\nKết quả in ra là:","options":["1","12","12d","d"],"answer":2,"explanation":"Do không có lệnh 'break', chương trình chạy tuột qua tất cả các case tiếp theo (fall-through)."},{"id":"code_14","title":"Cho đoạn code sau:\nclass Counter {\n    static int count = 0;\n    Counter() { count++; }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new Counter(); new Counter(); new Counter();\n        System.out.println(Counter.count);\n    }\n}\nKết quả in ra là:","options":["1","2","3","0"],"answer":2,"explanation":"count là biến static dùng chung cho mọi đối tượng. 3 lần gọi constructor làm count tăng 3 lần."},{"id":"code_15","title":"Cho đoạn code sau:\nString s1 = \"abc\";\nString s2 = \"ab\" + \"c\";\nSystem.out.println(s1 == s2);\nKết quả in ra là:","options":["true","false","Lỗi biên dịch","Lỗi runtime"],"answer":0,"explanation":"\"ab\" + \"c\" là biểu thức hằng số chuỗi (constant string expression), được nối tại compile-time và lưu vào String Pool nên s1 == s2 trả về true."}];
+        const essayQuestions = [{"id":"tl_1","category":"Lý thuyết & Cơ chế Java","question":"Câu 1. Trong Java, điều gì xảy ra khi một lớp có phương thức được khai báo là final?","answer":"Phương thức được khai báo với từ khóa `final` thì KHÔNG thể bị ghi đè (override) bởi bất kỳ lớp con nào kế thừa từ nó. Tuy nhiên lớp con vẫn được phép kế thừa và gọi sử dụng bình thường.","code":"class Parent {\n    final void display() {\n        System.out.println(\"Không thể ghi đè!\");\n    }\n}\nclass Child extends Parent {\n    // void display() {} // -> LỖI BIÊN DỊCH!\n}"},{"id":"tl_2","category":"Toán tử & Biểu thức","question":"Câu 2. Phân tích kết quả của biểu thức: int x = 5; System.out.println(x++ + ++x);","answer":"Kết quả in ra màn hình là **12**.\n\n**Các bước thực thi:**\n1. `x++` lấy giá trị hiện tại của x là 5 vào biểu thức, sau đó x được tăng lên 6.\n2. `++x` tăng giá trị của x từ 6 lên 7 trước, sau đó lấy giá trị 7 vào biểu thức.\n3. Phép cộng: `5 + 7 = 12`.","code":"int x = 5;\nint result = x++ + ++x; // 5 + 7 = 12\nSystem.out.println(result); // In ra 12"},{"id":"tl_3","category":"Kế thừa & Từ khóa","question":"Câu 3. Trong Java, từ khóa super được dùng để làm gì và có những cách dùng nào?","answer":"Từ khóa `super` là biến tham chiếu trỏ đến đối tượng của lớp cha trực tiếp:\n1. `super.methodName()`: Dùng để gọi phương thức của lớp cha (đặc biệt khi phương thức đó đã bị lớp con ghi đè).\n2. `super.variableName`: Dùng để truy cập thuộc tính của lớp cha (khi lớp con có thuộc tính trùng tên).\n3. `super(tham_số)`: Dùng để gọi constructor của lớp cha. Chú ý: câu lệnh này bắt buộc phải nằm ở dòng đầu tiên trong thân constructor của lớp con.","code":"class Animal {\n    Animal(String name) { System.out.println(\"Animal: \" + name); }\n    void sound() { System.out.println(\"Sound\"); }\n}\nclass Dog extends Animal {\n    Dog() {\n        super(\"Chó\"); // Gọi constructor cha\n        super.sound(); // Gọi method cha\n    }\n}"},{"id":"tl_4","category":"String Pool & So sánh","question":"Câu 4. Phân biệt toán tử == và phương thức equals() đối với đối tượng String trong Java:","answer":"- **Toán tử `==`:** So sánh địa chỉ vùng nhớ (tham chiếu) của 2 đối tượng trên Heap xem có cùng trỏ tới 1 ô nhớ hay không.\n- **Phương thức `equals()`:** So sánh nội dung chuỗi ký tự bên trong.\n\n*Ví dụ:* `String s1 = \"abc\"; String s2 = new String(\"abc\");`\n-> `s1 == s2` là `false` (vì s2 tạo đối tượng mới trên Heap, s1 trong Pool).\n-> `s1.equals(s2)` là `true` (vì cùng chứa chữ 'abc').","code":"String s1 = \"Hello\";\nString s2 = new String(\"Hello\");\nSystem.out.println(s1 == s2);      // false (khác vùng nhớ)\nSystem.out.println(s1.equals(s2)); // true (cùng nội dung)"},{"id":"tl_5","category":"Xử lý ngoại lệ (Exception)","question":"Câu 5. Trình bày cơ chế hoạt động của khối try - catch - finally. Khối finally có luôn chạy không?","answer":"- **try:** Chứa đoạn mã có nguy cơ phát sinh ngoại lệ (Exception).\n- **catch:** Chứa đoạn mã bắt và xử lý ngoại lệ khi có lỗi xảy ra trong khối try tương ứng.\n- **finally:** Luôn luôn được thực thi dù trong try có xảy ra lỗi hay không, và ngay cả khi có lệnh `return`. Khối finally thường được dùng để giải phóng tài nguyên (đóng file, ngắt kết nối database Connection, đóng ResultSet).\n*Trường hợp ngoại lệ duy nhất finally không chạy:* Khi máy ảo JVM bị dừng đột ngột bằng lệnh `System.exit(0);`.","code":"try {\n    int a = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"Lỗi chia cho 0\");\n} finally {\n    System.out.println(\"Luôn luôn thực thi\");\n}"},{"id":"tl_6","category":"Lớp trừu tượng & Giao diện","question":"Câu 6. So sánh Abstract Class và Interface trong Java hiện đại (từ Java 8+):","answer":"| Tiêu chí | Abstract Class | Interface |\n|---|---|---|\n| **Kế thừa** | Đơn kế thừa (`extends`) | Đa kế thừa (`implements` nhiều interface) |\n| **Phương thức** | Có thể có cả abstract và non-abstract | Abstract method, default method, static method (Java 8), private method (Java 9) |\n| **Thuộc tính** | Mọi loại biến (static, final, non-static) | Chỉ có hằng số ngầm định (`public static final`) |\n| **Constructor** | Có constructor | Không có constructor |","code":"interface Flyable {\n    void fly(); // public abstract\n    default void log() { System.out.println(\"Flying\"); }\n}\nabstract class Bird {\n    String name;\n    Bird(String name) { this.name = name; }\n    abstract void eat();\n}"},{"id":"tl_7","category":"Lập trình CSDL (JDBC)","question":"Câu 7. Phân biệt execute(), executeQuery(), executeUpdate() trong JDBC Statement:","answer":"- **`executeQuery(String sql)`:** Dành riêng cho câu truy vấn đọc dữ liệu `SELECT`. Trả về đối tượng `ResultSet`.\n- **`executeUpdate(String sql)`:** Dành cho các thao tác thay đổi dữ liệu: `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP`. Trả về số nguyên `int` biểu thị số dòng bị ảnh hưởng.\n- **`execute(String sql)`:** Dành cho các câu lệnh SQL động bất kỳ. Trả về `boolean` (`true` nếu kết quả trả về là ResultSet, `false` nếu là số dòng cập nhật).","code":"Statement stmt = conn.createStatement();\nResultSet rs = stmt.executeQuery(\"SELECT * FROM SinhVien\");\nint rows = stmt.executeUpdate(\"UPDATE SinhVien SET Diem = 10 WHERE MaSV = 1\");\nboolean hasRs = stmt.execute(\"...\");"},{"id":"tl_8","category":"Lập trình CSDL (JDBC)","question":"Câu 8. Làm thế nào để lấy khóa tự tăng (Auto-Increment) khi INSERT một dòng dữ liệu mới trong JDBC?","answer":"1. Khi tạo PreparedStatement, cần truyền thêm tham số cờ `Statement.RETURN_GENERATED_KEYS`.\n2. Sau khi gọi lệnh `executeUpdate()`, gọi phương thức `ps.getGeneratedKeys()` để nhận tập kết quả ResultSet chứa khóa mới sinh ra.\n3. Dùng `rs.getInt(1)` để đọc giá trị khóa tự tăng đó.","code":"String sql = \"INSERT INTO NhanVien (Ten, Tuoi) VALUES (?, ?)\";\nPreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);\nps.setString(1, \"Nguyen Van A\");\nps.setInt(2, 22);\nps.executeUpdate();\n\nResultSet rs = ps.getGeneratedKeys();\nif (rs.next()) {\n    int idMoi = rs.getInt(1); // Lấy ID khóa tự tăng\n}"},{"id":"tl_9","category":"Kiến trúc phần mềm","question":"Câu 9. Mô hình kiến trúc MVC (Model - View - Controller) là gì và vai trò của từng thành phần?","answer":"- **Model:** Chứa toàn bộ dữ liệu, các lớp thực thể (Entity) và logic nghiệp vụ, giao tiếp với CSDL (truy vấn, lưu trữ dữ liệu).\n- **View:** Giao diện trực quan tiếp xúc với người dùng (màn hình JFrame, Android Activity, HTML/JSP). Nhận dữ liệu từ Controller để hiển thị và bắt các sự kiện nhập liệu từ người dùng.\n- **Controller:** Đóng vai trò cầu nối trung gian, tiếp nhận yêu cầu/sự kiện từ View, gọi Model xử lý nghiệp vụ rồi chuyển kết quả hiển thị lại cho View tương ứng.","code":"// Model: Lop SinhVien & SinhVienDAO\n// View: SinhVienFrame (chứa JTable, JButton, JTextField)\n// Controller: SinhVienController (lắng nghe btnSave click -> goi DAO.insert -> cap nhat JTable)"},{"id":"tl_10","category":"ORM Framework (Hibernate)","question":"Câu 10. Trình bày các bước cấu hình và làm việc với Hibernate trong NetBeans:","answer":"1. **Thêm thư viện:** Add file `hibernate.jar` và JDBC Driver tương ứng (MySQL Connector, SQL Server JDBC) vào Project.\n2. **Tạo file cấu hình `hibernate.cfg.xml`:** Cấu hình URL kết nối DB, username, password, Driver class và Dialect (ví dụ MySQL8Dialect).\n3. **Tạo lớp `HibernateUtil.java`:** Chứa đối tượng Singleton `SessionFactory` để mở các Session.\n4. **Tạo Entity POJO:** Tạo các class tương ứng với các bảng trong DB kèm các chú thích (Annotation: `@Entity`, `@Table`, `@Id`, `@Column`).\n5. **Thao tác dữ liệu (CRUD):** Mở Session (`factory.openSession()`), bắt đầu Transaction (`session.beginTransaction()`), thực hiện CRUD (`save()`, `update()`, `delete()`, `createQuery()`), sau đó `transaction.commit()` và đóng Session.","code":"Session session = HibernateUtil.getSessionFactory().openSession();\nTransaction tx = session.beginTransaction();\ntry {\n    SinhVien sv = new SinhVien(\"SV01\", \"Giang\");\n    session.save(sv);\n    tx.commit();\n} catch (Exception e) {\n    if (tx != null) tx.rollback();\n} finally {\n    session.close();\n}"},{"id":"tl_11","category":"Lập trình Android (Java)","question":"Câu 11. Trình bày cách tạo Options Menu và Context Menu trong Android:","answer":"- **Options Menu:**\n  1. Định nghĩa file XML menu trong thư mục `res/menu/menu_main.xml`.\n  2. Ghi đè phương thức `onCreateOptionsMenu(Menu menu)` để nạp menu bằng `getMenuInflater().inflate(R.menu.menu_main, menu);`.\n  3. Bắt sự kiện chọn item trong `onOptionsItemSelected(MenuItem item)` bằng `item.getItemId()`.\n\n- **Context Menu (menu nhấn giữ):**\n  1. Đăng ký View cần menu bằng `registerForContextMenu(view);`.\n  2. Ghi đè `onCreateContextMenu(...)` để inflate layout menu.\n  3. Bắt sự kiện trong `onContextItemSelected(MenuItem item)`.","code":"@Override\npublic boolean onCreateOptionsMenu(Menu menu) {\n    getMenuInflater().inflate(R.menu.menu_main, menu);\n    return true;\n}\n\n@Override\npublic boolean onOptionsItemSelected(MenuItem item) {\n    if (item.getItemId() == R.id.mnuExit) { finish(); return true; }\n    return super.onOptionsItemSelected(item);\n}"}];
+
+        let allQuestions = [...oopQuestions, ...basicQuestions, ...codeQuestions];
+        let currentQuestions = [...allQuestions];
+        let userAnswers = {}; // { qId: selectedOptionIndex }
+        let wrongQuestions = new Set();
+
+        // Initialize from localStorage
+        try {
+            const savedAns = localStorage.getItem('java_quiz_answers');
+            if (savedAns) userAnswers = JSON.parse(savedAns);
+            const savedWrong = localStorage.getItem('java_quiz_wrong');
+            if (savedWrong) wrongQuestions = new Set(JSON.parse(savedWrong));
+        } catch(e) {}
+
+        function saveState() {
+            localStorage.setItem('java_quiz_answers', JSON.stringify(userAnswers));
+            localStorage.setItem('java_quiz_wrong', JSON.stringify([...wrongQuestions]));
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('java_quiz_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+        if (localStorage.getItem('java_quiz_theme') === 'dark') {
+            document.body.classList.add('dark');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-quiz').style.display = 'none';
+            document.getElementById('tab-essay').style.display = 'none';
+            document.getElementById('tab-vandap').style.display = 'none';
+
+            if (tab === 'quiz') {
+                event.target.classList.add('active');
+                document.getElementById('tab-quiz').style.display = 'block';
+            } else if (tab === 'essay') {
+                event.target.classList.add('active');
+                document.getElementById('tab-essay').style.display = 'block';
+                renderEssay();
+            } else if (tab === 'vandap') {
+                event.target.classList.add('active');
+                document.getElementById('tab-vandap').style.display = 'block';
+                renderVandap();
+            }
+        }
+
+        function changeQuestionSet() {
+            const val = document.getElementById('setSelect').value;
+            if (val === 'all') currentQuestions = [...allQuestions];
+            else if (val === 'oop') currentQuestions = [...oopQuestions];
+            else if (val === 'basic') currentQuestions = [...basicQuestions];
+            else if (val === 'code') currentQuestions = [...codeQuestions];
+            else if (val === 'wrong') {
+                currentQuestions = allQuestions.filter(q => wrongQuestions.has(q.id));
+                if (currentQuestions.length === 0) {
+                    alert('🎉 Tuyệt vời! Hiện tại bạn không có câu nào làm sai trong danh sách.');
+                    document.getElementById('setSelect').value = 'all';
+                    currentQuestions = [...allQuestions];
+                }
+            }
+            renderQuiz();
+        }
+
+        function shuffleCurrentQuestions() {
+            for (let i = currentQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
+            }
+            renderQuiz();
+        }
+
+        function resetQuiz() {
+            if (confirm('Bạn có chắc chắn muốn xóa toàn bộ kết quả đã làm để làm lại?')) {
+                userAnswers = {};
+                wrongQuestions.clear();
+                saveState();
+                renderQuiz();
+            }
+        }
+
+        function selectAnswer(qId, selectedIdx) {
+            if (userAnswers[qId] !== undefined) return; // Locked once answered
+            userAnswers[qId] = selectedIdx;
+            
+            const q = allQuestions.find(x => x.id === qId);
+            if (selectedIdx === q.answer) {
+                wrongQuestions.delete(qId);
+            } else {
+                wrongQuestions.add(qId);
+            }
+            saveState();
+            renderQuizCard(qId);
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = currentQuestions.length;
+            let done = 0, correct = 0, wrong = 0;
+            currentQuestions.forEach(q => {
+                const ans = userAnswers[q.id];
+                if (ans !== undefined) {
+                    done++;
+                    if (ans === q.answer) correct++;
+                    else wrong++;
+                }
+            });
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-done').innerText = done;
+            document.getElementById('stat-correct').innerText = correct;
+            document.getElementById('stat-wrong').innerText = wrong;
+            const pct = done > 0 ? Math.round((correct / done) * 100) : 0;
+            document.getElementById('stat-pct').innerText = pct + '%';
+        }
+
+        function formatQuestionTitle(title) {
+            // Check if title has code
+            const parts = title.split('\n');
+            let textPart = [];
+            let codePart = [];
+            let inCode = false;
+
+            for (const line of parts) {
+                if (line.includes('class ') || line.includes('public static') || line.includes('interface ') || line.includes('{') || line.includes('}')) {
+                    inCode = true;
+                }
+                if (inCode) codePart.push(line);
+                else textPart.push(line);
+            }
+
+            if (codePart.length > 0) {
+                return '<div class="q-title">' + escapeHtml(textPart.join('\n')) + '</div>' +
+                       '<pre class="code-block">' + escapeHtml(codePart.join('\n')) + '</pre>';
+            }
+            return '<div class="q-title">' + escapeHtml(title) + '</div>';
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function renderQuizCard(qId) {
+            const cardEl = document.getElementById('card-' + qId);
+            if (!cardEl) return;
+            const q = allQuestions.find(x => x.id === qId);
+            const userPick = userAnswers[qId];
+            const answered = userPick !== undefined;
+
+            const letters = ['A', 'B', 'C', 'D'];
+            let optsHtml = '';
+            q.options.forEach((opt, idx) => {
+                let optClass = 'option-item';
+                if (answered) {
+                    optClass += ' locked';
+                    if (idx === q.answer) optClass += ' correct';
+                    else if (idx === userPick) optClass += ' wrong';
+                }
+                optsHtml += `
+                    <div class="${optClass}" onclick="selectAnswer('${q.id}', ${idx})">
+                        <div class="badge">${letters[idx]}</div>
+                        <div>${escapeHtml(opt)}</div>
+                    </div>
+                `;
+            });
+
+            let expHtml = '';
+            if (answered) {
+                const isCorrect = userPick === q.answer;
+                expHtml = `
+                    <div class="explanation-box show" style="border-left-color: ${isCorrect ? 'var(--success)' : 'var(--error)'}">
+                        <strong style="color: ${isCorrect ? 'var(--success)' : 'var(--error)'}">
+                            ${isCorrect ? '✅ Bạn đã trả lời CHÍNH XÁC!' : '❌ Bạn đã trả lời SAI! (Đáp án đúng là ' + letters[q.answer] + ')'}
+                        </strong>
+                        <p>${escapeHtml(q.explanation || '')}</p>
+                    </div>
+                `;
+            }
+
+            cardEl.innerHTML = `
+                <div class="q-header">
+                    <span class="q-tag">${q.id.toUpperCase()}</span>
+                </div>
+                ${formatQuestionTitle(q.title)}
+                <div class="options-list">${optsHtml}</div>
+                ${expHtml}
+            `;
+        }
+
+        function renderQuiz() {
+            const listEl = document.getElementById('quiz-list');
+            listEl.innerHTML = currentQuestions.map(q => `<div class="question-card" id="card-${q.id}"></div>`).join('');
+            currentQuestions.forEach(q => renderQuizCard(q.id));
+            updateStats();
+        }
+
+        function renderEssay() {
+            const listEl = document.getElementById('essay-list');
+            const keyword = (document.getElementById('essaySearch').value || '').toLowerCase().trim();
+            const filtered = essayQuestions.filter(e => {
+                return !keyword || e.question.toLowerCase().includes(keyword) || e.answer.toLowerCase().includes(keyword) || (e.category && e.category.toLowerCase().includes(keyword));
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = '<p style="text-align:center; padding: 40px; color: var(--text-muted);">Không tìm thấy câu hỏi nào phù hợp với từ khóa.</p>';
+                return;
+            }
+
+            listEl.innerHTML = filtered.map((e, idx) => `
+                <div class="essay-card">
+                    <span class="essay-category">${e.category || 'Tự Luận'}</span>
+                    <div class="essay-q">${escapeHtml(e.question)}</div>
+                    <div class="essay-ans">${escapeHtml(e.answer)}</div>
+                    ${e.code ? '<pre class="code-block">' + escapeHtml(e.code) + '</pre>' : ''}
+                </div>
+            `).join('');
+        }
+
+        function filterEssay() {
+            renderEssay();
+        }
+
+        function renderVandap() {
+            const listEl = document.getElementById('vandap-list');
+            const items = [
+                {
+                    title: "1. Quy trình biên dịch và chạy file .java",
+                    content: "• javac (Java Compiler) biên dịch file .java thành Bytecode chứa trong file .class.\n• JVM (Java Virtual Machine) sử dụng ClassLoader nạp bytecode vào bộ nhớ.\n• JIT Compiler & Interpreter dịch bytecode thành mã máy tương ứng với hệ điều hành và CPU để thực thi.\n-> Giúp Java đạt được tính độc lập nền tảng 'Write Once, Run Anywhere'."
+                },
+                {
+                    title: "2. Auto-boxing và Unboxing trong Java",
+                    content: "• Auto-boxing: Tự động chuyển kiểu nguyên thủy sang Wrapper class (int -> Integer, double -> Double).\n• Unboxing: Tự động giải phóng từ Wrapper class về kiểu nguyên thủy tương ứng.\nVí dụ:\nInteger a = 10; // Auto-boxing\nint b = a;       // Unboxing"
+                },
+                {
+                    title: "3. Mô hình MVC trong lập trình ứng dụng",
+                    content: "• Model: Quản lý dữ liệu, logic nghiệp vụ, kết nối CSDL (các lớp POJO/Entity & DAO).\n• View: Giao diện người dùng (JFrame, JPanel, Activity trong Android).\n• Controller: Tiếp nhận sự kiện từ View, gọi Model cập nhật dữ liệu và cập nhật lại giao diện."
+                },
+                {
+                    title: "4. Lập trình JDBC - Lấy khóa tự tăng (Auto-Increment / Identity)",
+                    content: "Khi tạo PreparedStatement:\nPreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);\nps.executeUpdate();\nResultSet rs = ps.getGeneratedKeys();\nif (rs.next()) { int id = rs.getInt(1); }"
+                },
+                {
+                    title: "5. Lập trình Hibernate với NetBeans",
+                    content: "1. Thêm thư viện Hibernate & JDBC Driver.\n2. Tạo file hibernate.cfg.xml cấu hình kết nối DB (URL, user, pass, dialect).\n3. Tạo lớp HibernateUtil khởi tạo SessionFactory.\n4. Tạo Entity POJO có các annotation @Entity, @Id, @Column.\n5. Mở Session, tạo Transaction (beginTransaction()), thực hiện session.save()/update(), sau đó tx.commit()."
+                },
+                {
+                    title: "6. Lập trình Android - Menu & Dialogs",
+                    content: "• Options Menu: Override onCreateOptionsMenu() -> getMenuInflater().inflate(R.menu.menu_main, menu).\n• Bắt sự kiện menu: Override onOptionsItemSelected(MenuItem item) và kiểm tra item.getItemId().\n• Context Menu: registerForContextMenu(view) -> onCreateContextMenu() -> onContextItemSelected().\n• Dialog: AlertDialog.Builder, DatePickerDialog, TimePickerDialog."
+                }
+            ];
+
+            listEl.innerHTML = items.map(it => `
+                <div class="essay-card">
+                    <div class="essay-q" style="color: var(--primary);">${escapeHtml(it.title)}</div>
+                    <div class="essay-ans">${escapeHtml(it.content)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Initial Render
+        renderQuiz();
+    </script>
+</body>
+</html>
